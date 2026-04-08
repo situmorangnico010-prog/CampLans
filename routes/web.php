@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
+Route::get('/welcome', function () {
     return view('welcome');
 });
 
@@ -16,4 +16,12 @@ Route::get('/home', function () {
 
 Route::get('/about', function () {
     return view('about');
+});
+
+Route::get('/kontak', function () {
+    return view('kontak');
+});
+
+Route::get('/produk', function () {
+    return view('produk');
 });
