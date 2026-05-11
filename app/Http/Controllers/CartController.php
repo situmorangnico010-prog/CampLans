@@ -78,7 +78,6 @@ class CartController extends Controller
         $end   = $cart['end'];
         $days  = max(1, Carbon::parse($start)->diffInDays(Carbon::parse($end)));
 
-        // ✅ cek ketersediaan
         foreach ($cart['items'] as $itemId => $qty) {
             if (!$this->checkAvailability($itemId, $start, $end)) {
                 return back()->with('error', '⚠️ Barang tidak tersedia');
