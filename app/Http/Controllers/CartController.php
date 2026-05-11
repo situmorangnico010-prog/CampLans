@@ -14,7 +14,7 @@ class CartController extends Controller
     public function index()
     {
         $cart = session('cart', ['items' => [], 'start' => null, 'end' => null]);
-        
+
         if (empty($cart['items'])) {
             return redirect()->route('items.index');
         }
@@ -119,7 +119,7 @@ class CartController extends Controller
 
             return redirect()->route('rentals.index')
                 ->with('success', '✅ Booking berhasil!');
-                
+
         } catch (\Exception $e) {
             DB::rollBack();
 
