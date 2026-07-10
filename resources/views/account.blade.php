@@ -37,9 +37,9 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Password Baru</label>
-                    <input type="password" name="password" placeholder="Kosongkan jika tidak ingin mengubah" 
+                    <input type="password" name="password" placeholder="Kosongkan jika tidak ingin mengubah" minlength="8"
                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none text-gray-900 dark:text-white transition">
-                    <p class="text-xs text-gray-400 mt-1">Minimal 6 karakter.</p>
+                    <p class="text-xs text-gray-400 mt-1">Minimal 8 karakter.</p>
                 </div>
                 <div class="pt-4 flex justify-end">
                     <button type="submit" class="bg-teal-500 text-white px-8 py-3 rounded-xl font-semibold hover:bg-teal-600 transition shadow-md hover:shadow-lg transform hover:-translate-y-0.5">

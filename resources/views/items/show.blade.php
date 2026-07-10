@@ -3,10 +3,7 @@
 
 @push('styles')
 <style>
-    .main-img { aspect-ratio: 4/3; object-fit: cover; border-radius: 1.5rem; cursor: zoom-in; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
-    .main-img:hover { transform: scale(1.02); }
-    .thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 0.75rem; cursor: pointer; border: 2px solid transparent; opacity: 0.6; transition: all 0.3s; }
-    .thumb.active, .thumb:hover { border-color: #14b8a6; opacity: 1; transform: translateY(-3px); box-shadow: 0 4px 12px rgba(20, 184, 166, 0.2); }
+    .main-img { aspect-ratio: 4/3; object-fit: cover; border-radius: 1.5rem; }
     
     .tab-btn { padding: 1rem; font-weight: 600; border-bottom: 2px solid transparent; color: #64748b; transition: all 0.3s; white-space: nowrap; }
     .dark .tab-btn { color: #94a3b8; }
@@ -43,14 +40,7 @@
         <div class="lg:col-span-2 space-y-6">
             <!-- Gallery -->
             <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700">
-                <img id="mainImage" src="{{ $item->image_url }}" class="main-img w-full mb-4" onerror="this.src='https://placehold.co/800x600/e5e7eb/6b7280?text=Product+Image'">
-                <div class="flex gap-3 overflow-x-auto pb-2">
-                    <img src="{{ $item->image_url }}" class="thumb active" onclick="changeImage(this)" onerror="this.src='https://placehold.co/80x60/e5e7eb/6b7280?text=IMG'">
-                    <!-- Mock thumbnails -->
-                    <img src="https://placehold.co/80x60/e5e7eb/6b7280?text=Side" class="thumb" onclick="changeImage(this)">
-                    <img src="https://placehold.co/80x60/e5e7eb/6b7280?text=Back" class="thumb" onclick="changeImage(this)">
-                    <img src="https://placehold.co/80x60/e5e7eb/6b7280?text=Box" class="thumb" onclick="changeImage(this)">
-                </div>
+                <img id="mainImage" src="{{ $item->image ? asset('storage/' . $item->image) : $item->image_url }}" class="main-img w-full" onerror="this.src='https://placehold.co/800x600/e5e7eb/6b7280?text=Product+Image'">
             </div>
 
             <!-- Header Info -->
@@ -66,8 +56,6 @@
                     </div>
                 </div>
                 <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400 border-t border-gray-100 dark:border-gray-700 pt-4">
-                    <span class="flex items-center gap-1"><span class="text-yellow-400">★★★★☆</span> (4.8)</span>
-                    <span class="hidden sm:inline">•</span>
                     <span class="flex items-center gap-1.5 {{ $item->stock > 0 ? 'text-green-500' : 'text-red-500' }}">
                         <span class="w-2 h-2 rounded-full {{ $item->stock > 0 ? 'bg-green-500' : 'bg-red-500' }}"></span>
                         {{ $item->stock > 0 ? 'Tersedia (' . $item->stock . ' unit)' : 'Habis Tersewa' }}
@@ -75,40 +63,24 @@
                 </div>
             </div>
 
-            <!-- Tabs: Deskripsi, Spesifikasi, Review -->
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden" x-data="{ tab: 'desc' }">
-                <div class="flex border-b border-gray-100 dark:border-gray-700 overflow-x-auto hide-scrollbar">
-                    <button @click="tab = 'desc'" :class="{ 'active': tab === 'desc' }" class="tab-btn flex-1 text-center">Deskripsi</button>
-                    <button @click="tab = 'specs'" :class="{ 'active': tab === 'specs' }" class="tab-btn flex-1 text-center">Spesifikasi</button>
-                    <button @click="tab = 'reviews'" :class="{ 'active': tab === 'reviews' }" class="tab-btn flex-1 text-center">Ulasan</button>
-                </div>
-                <div class="p-6 min-h-[200px]">
-                    <div x-show="tab === 'desc'" class="tab-content active text-gray-600 dark:text-gray-300 leading-relaxed space-y-3">
-                        <p>Sewa {{ $item->name }} berkualitas tinggi untuk kebutuhan petualangan atau profesional Anda. Barang dalam kondisi prima, terawat rutin, dan dilengkapi dengan aksesoris standar.</p>
-                        <ul class="space-y-2 list-disc pl-5 mt-2">
-                            <li>Kondisi 95% baru & terkalibrasi</li>
-                            <li>Termasuk tas original & baterai cadangan</li>
-                            <li>Garansi kerusakan teknis selama masa sewa</li>
-                            <li>Pengambilan & pengembalian fleksibel</li>
-                        </ul>
+            <!-- Deskripsi -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                <div class="p-6 space-y-6">
+                    <div>
+                        <h3 class="text-base font-bold text-gray-900 dark:text-white mb-3">Deskripsi</h3>
+                        <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                            {{ $item->description ?? 'Sewa ' . $item->name . ' berkualitas tinggi untuk kebutuhan petualangan atau profesional Anda. Barang dalam kondisi prima, terawat rutin, dan dilengkapi dengan aksesoris standar.' }}
+                        </p>
                     </div>
-                    <div x-show="tab === 'specs'" class="tab-content">
+
+                    <div class="border-t border-gray-100 dark:border-gray-700 pt-5">
+                        <h3 class="text-base font-bold text-gray-900 dark:text-white mb-3">Spesifikasi</h3>
                         <table class="w-full text-sm">
                             <tr class="border-b border-gray-100 dark:border-gray-700"><td class="py-3 text-gray-500 w-1/3">Kategori</td><td class="py-3 font-medium text-gray-900 dark:text-white">{{ $item->category->name }}</td></tr>
                             <tr class="border-b border-gray-100 dark:border-gray-700"><td class="py-3 text-gray-500">Stok Tersedia</td><td class="py-3 font-medium text-gray-900 dark:text-white">{{ $item->stock }} unit</td></tr>
                             <tr class="border-b border-gray-100 dark:border-gray-700"><td class="py-3 text-gray-500">Harga Sewa</td><td class="py-3 font-medium text-gray-900 dark:text-white">Rp {{ number_format($item->daily_rate, 0, ',', '.') }} / hari</td></tr>
                             <tr><td class="py-3 text-gray-500">Kode Barang</td><td class="py-3 font-medium text-gray-900 dark:text-white">#{{ str_pad($item->id, 4, '0', STR_PAD_LEFT) }}</td></tr>
                         </table>
-                    </div>
-                    <div x-show="tab === 'reviews'" class="tab-content space-y-4">
-                        <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
-                            <div class="flex justify-between mb-1"><span class="font-semibold text-gray-900 dark:text-white">Budi S.</span><span class="text-yellow-400 text-xs">★★★★★</span></div>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">Barang sesuai deskripsi, sangat membantu trip saya minggu lalu! Admin juga fast response.</p>
-                        </div>
-                        <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
-                            <div class="flex justify-between mb-1"><span class="font-semibold text-gray-900 dark:text-white">Anita R.</span><span class="text-yellow-400 text-xs">★★★★☆</span></div>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">Pelayanan cepat, kondisi barang bersih. Recommended buat yang mau coba gear baru.</p>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -132,6 +104,11 @@
                         <input type="date" name="end" id="endDate" required class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none transition text-gray-900 dark:text-white">
                     </div>
 
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Catatan (opsional)</label>
+                        <textarea name="notes" placeholder="Tulis catatan jika ada..." rows="2" class="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none transition text-sm text-gray-900 dark:text-white resize-none"></textarea>
+                    </div>
+
                     <!-- Dynamic Price Summary -->
                     <div id="priceSummary" class="hidden p-4 bg-teal-50 dark:bg-teal-900/20 rounded-xl border border-teal-100 dark:border-teal-800 transition-all">
                         <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-1"><span>Durasi:</span><span id="durationText" class="font-medium">0 hari</span></div>
@@ -142,7 +119,6 @@
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                         Tambah ke Keranjang
                     </button>
-                    <p class="text-xs text-center text-gray-400 mt-2">🔒 Gratis pembatalan 24 jam sebelum mulai</p>
                 </form>
             </div>
         </div>
@@ -155,7 +131,7 @@
             @forelse($relatedItems as $rel)
             <a href="{{ route('items.show', $rel) }}" class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-100 dark:border-gray-700 hover:shadow-md transition group block">
                 <div class="aspect-square bg-gray-100 dark:bg-gray-700 overflow-hidden">
-                    <img src="{{ $rel->image_url }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/200x200/e5e7eb/6b7280?text=IMG'">
+                    <img src="{{ $rel->image ? asset('storage/' . $rel->image) : $rel->image_url }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/200x200/e5e7eb/6b7280?text=IMG'">
                 </div>
                 <div class="p-3">
                     <p class="font-semibold text-gray-900 dark:text-white text-sm truncate">{{ $rel->name }}</p>
@@ -172,13 +148,6 @@
 
 @push('scripts')
 <script>
-    // Gallery Switcher
-    function changeImage(thumb) {
-        document.getElementById('mainImage').src = thumb.src;
-        document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
-        thumb.classList.add('active');
-    }
-
     // Date & Price Calculator
     const startInput = document.getElementById('startDate');
     const endInput = document.getElementById('endDate');

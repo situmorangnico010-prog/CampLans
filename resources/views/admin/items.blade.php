@@ -47,7 +47,7 @@
                         <input type="checkbox" name="ids[]" value="{{ $item->id }}" class="item-checkbox rounded text-teal-600 focus:ring-teal-500">
                     </td>
                     <td class="px-6 py-4">
-                        <img src="{{ $item->image_url }}" alt="{{ $item->name }}" class="w-16 h-12 object-cover rounded-lg shadow-sm">
+                        <img src="{{ $item->image ? asset('storage/' . $item->image) : $item->image_url }}" alt="{{ $item->name }}" class="w-16 h-12 object-cover rounded-lg shadow-sm">
                     </td>
                     <td class="px-6 py-4 font-medium text-sm">{{ $item->name }}</td>
                     <td class="px-6 py-4">
@@ -112,6 +112,10 @@
                     </div>
                 </div>
                 <div>
+                    <label class="block text-sm font-semibold mb-1">Deskripsi</label>
+                    <textarea name="description" rows="3" class="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-teal-500" placeholder="Masukkan deskripsi barang..."></textarea>
+                </div>
+                <div>
                     <label class="block text-sm font-semibold mb-1">Gambar</label>
                     <input type="file" name="image" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100">
                 </div>
@@ -154,6 +158,10 @@
                     </div>
                 </div>
                 <div>
+                    <label class="block text-sm font-semibold mb-1">Deskripsi</label>
+                    <textarea name="description" id="edit-description" rows="3" class="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-teal-500" placeholder="Masukkan deskripsi barang..."></textarea>
+                </div>
+                <div>
                     <label class="block text-sm font-semibold mb-1">Ganti Gambar (Opsional)</label>
                     <input type="file" name="image" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100">
                 </div>
@@ -162,8 +170,8 @@
         </form>
     </div>
 </div>
-<!-- [MODAL CODE END] -->
 
+<!-- [CRUD Kelola Kategori ADMIN] -->
 <script>
     const selectAll = document.getElementById('select-all');
     const checkboxes = document.querySelectorAll('.item-checkbox');
@@ -208,6 +216,7 @@
         document.getElementById('edit-category').value = item.category_id;
         document.getElementById('edit-rate').value = item.daily_rate;
         document.getElementById('edit-stock').value = item.stock;
+        document.getElementById('edit-description').value = item.description || '';
         document.getElementById('edit-item-modal').classList.remove('hidden');
     }
 </script>

@@ -7,11 +7,14 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('items', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_barang', 20)->unique();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
-            $table->string('name');
+            $table->string('name', 100);
             $table->decimal('daily_rate', 10, 2);
-            $table->string('image_url')->default('/placeholder.jpg');
-            $table->integer('stock')->default(1);
+            $table->string('image', 150)->nullable();
+            $table->text('description')->nullable();
+            $table->string('image_url', 150)->default('/placeholder.jpg');
+            $table->unsignedInteger('stock')->default(1);
             $table->timestamps();
         });
     }

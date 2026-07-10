@@ -7,7 +7,8 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('kode_kategori', 20)->unique();
+            $table->string('name', 100);
             $table->timestamps();
         });
     }

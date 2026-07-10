@@ -143,37 +143,27 @@
             @forelse($items as $item)
                 <div class="product-card-pro group">
                     <div class="relative aspect-[4/3] bg-gray-100 dark:bg-gray-700 overflow-hidden">
-                        <img src="{{ $item->image_url }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/400x300/e5e7eb/6b7280?text=IMG'">
+                        <img src="{{ $item->image ? asset('storage/' . $item->image) : $item->image_url }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/400x300/e5e7eb/6b7280?text=IMG'">
                         <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-bold text-white {{ $item->stock > 0 ? 'bg-green-500' : 'bg-red-500' }}">
                             {{ $item->stock > 0 ? 'Tersedia (' . $item->stock . ')' : 'Habis' }}
                         </span>
                     </div>
                     <div class="p-5">
                         <h3 class="font-bold text-gray-900 dark:text-white truncate">{{ $item->name }}</h3>
-                        <div class="flex items-center gap-1 mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            <span class="text-yellow-400">★★★★☆</span> <span>({{ rand(15, 90) }})</span>
-                        </div>
                         <p class="text-xs text-gray-400 mt-2 mb-3 line-clamp-2">
-                            {{ $item->category->name }} berkualitas tinggi untuk petualangan Anda.
+                            {{ $item->description ?? $item->category->name . ' berkualitas tinggi untuk petualangan Anda.' }}
                         </p>
                         <div class="flex items-end justify-between mt-4">
                             <div>
                                 <p class="text-xs text-gray-400">per hari</p>
                                 <p class="text-xl font-bold text-teal-600 dark:text-teal-400">Rp {{ number_format($item->daily_rate, 0, ',', '.') }}</p>
                             </div>
-                            @auth
-                                @if(auth()->user()->role === 'customer')
-                                    <form method="POST" action="{{ route('cart.add') }}">
-                                        @csrf
-                                        <input type="hidden" name="item_id" value="{{ $item->id }}">
-                                        <input type="hidden" name="start" value="{{ request('start') ?? now()->format('Y-m-d') }}">
-                                        <input type="hidden" name="end" value="{{ request('end') ?? now()->addDay()->format('Y-m-d') }}">
-                                        <button type="submit" class="bg-teal-500 text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-teal-600 transition shadow-sm">Sewa</button>
-                                    </form>
-                                @endif
-                            @else
-                                <a href="{{ route('login') }}" class="bg-teal-500 text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-teal-600 transition">Masuk</a>
-                            @endauth
+                            <div class="flex gap-2">
+                                <a href="{{ route('items.show', $item->id) }}"
+                                   class="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2.5 rounded-xl text-sm font-bold transition shadow-sm shadow-teal-500/30">
+                                    Rp{{ number_format($item->daily_rate, 0, ',', '.') }} / Hari
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

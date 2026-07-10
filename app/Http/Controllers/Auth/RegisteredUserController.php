@@ -13,10 +13,12 @@ use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
+use App\Http\Requests\Auth\RegisterCustomerRequest;
+
 class RegisteredUserController extends Controller
 {
     /**
-     * Display the registration view.
+     * Menampilkan halaman registrasi customer.
      */
     public function create(): View
     {
@@ -24,18 +26,12 @@ class RegisteredUserController extends Controller
     }
 
     /**
-     * Handle an incoming registration request.
+     * Menyimpan data customer baru ke database.
      *
      * @throws ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(RegisterCustomerRequest $request): RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
-
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -44,8 +40,7 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        Auth::login($user);
-
-        return redirect(route('dashboard', absolute: false));
+        // Pendaftaran berhasil, arahkan ke login dengan pesan sukses (tidak otomatis login)
+        return redirect(route('login'))->with('status', 'Akun berhasil dibuat. Silakan login menggunakan akun yang telah didaftarkan.');
     }
 }

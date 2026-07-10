@@ -41,14 +41,17 @@
                         <label for="email" class="block text-sm font-semibold text-slate-700 mb-2">Email</label>
                         <input id="email" type="email" name="email" value="{{ old('email') }}" required
                                class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 transition-all outline-none text-slate-900 placeholder:text-slate-400"
-                               placeholder="nama@email.com">
-                        <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                               placeholder="nama@gmail.com">
+                        <p class="text-xs text-slate-400 mt-1.5">
+                            Gunakan email dengan domain <span class="font-semibold text-slate-500">@gmail.com</span>
+                        </p>
+                        <x-input-error :messages="$errors->get('email')" class="mt-1" />
                     </div>
 
                     <!-- Password -->
                     <div>
                         <label for="password" class="block text-sm font-semibold text-slate-700 mb-2">Kata Sandi</label>
-                        <input id="password" type="password" name="password" required autocomplete="new-password"
+                        <input id="password" type="password" name="password" required autocomplete="new-password" minlength="8"
                                class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-teal-500/10 focus:border-teal-500 transition-all outline-none text-slate-900 placeholder:text-slate-400"
                                placeholder="Minimal 8 karakter">
                         <x-input-error :messages="$errors->get('password')" class="mt-2" />

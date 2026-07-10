@@ -37,27 +37,26 @@
             @endforeach
         </div>
 
-        <!-- Contact Cards -->
         <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6 text-center">Butuh Bantuan Langsung?</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="glass-card rounded-2xl p-6 text-center hover:shadow-lg transition border border-gray-100 dark:border-gray-700 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md">
-                <div class="w-14 h-14 mx-auto bg-green-50 dark:bg-green-900/30 rounded-2xl flex items-center justify-center text-2xl mb-4">💬</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+            <!-- WhatsApp Card -->
+            <a href="https://wa.me/6287829988870" target="_blank" rel="noopener noreferrer"
+               class="glass-card rounded-2xl p-6 text-center hover:shadow-lg transition border border-gray-100 dark:border-gray-700 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md cursor-pointer group">
+                <div class="w-14 h-14 mx-auto bg-green-50 dark:bg-green-900/30 rounded-2xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">💬</div>
                 <h3 class="font-bold text-gray-900 dark:text-white mb-1">WhatsApp</h3>
                 <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">Respon cepat 08.00-20.00</p>
-                <a href="https://wa.me/6281234567890" class="text-teal-600 dark:text-teal-400 font-semibold text-sm hover:underline">Chat Sekarang →</a>
-            </div>
-            <div class="glass-card rounded-2xl p-6 text-center hover:shadow-lg transition border border-gray-100 dark:border-gray-700 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md">
-                <div class="w-14 h-14 mx-auto bg-blue-50 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center text-2xl mb-4">📧</div>
-                <h3 class="font-bold text-gray-900 dark:text-white mb-1">Email Support</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">Untuk keluhan & kerjasama</p>
-                <a href="mailto:support@camplans.com" class="text-teal-600 dark:text-teal-400 font-semibold text-sm hover:underline">support@camplans.com</a>
-            </div>
-            <div class="glass-card rounded-2xl p-6 text-center hover:shadow-lg transition border border-gray-100 dark:border-gray-700 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md">
-                <div class="w-14 h-14 mx-auto bg-purple-50 dark:bg-purple-900/30 rounded-2xl flex items-center justify-center text-2xl mb-4">📍</div>
+                <span class="text-teal-600 dark:text-teal-400 font-semibold text-sm group-hover:underline">Chat Sekarang →</span>
+            </a>
+
+            <!-- Lokasi Pickup Card -->
+            <a href="https://maps.google.com/?q=Politeknik+Negeri+Batam" target="_blank" rel="noopener noreferrer"
+               class="glass-card rounded-2xl p-6 text-center hover:shadow-lg transition border border-gray-100 dark:border-gray-700 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md cursor-pointer group">
+                <div class="w-14 h-14 mx-auto bg-purple-50 dark:bg-purple-900/30 rounded-2xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">📍</div>
                 <h3 class="font-bold text-gray-900 dark:text-white mb-1">Lokasi Pickup</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">Jl. Kampus No. 123, Depok</p>
-                <span class="text-teal-600 dark:text-teal-400 font-semibold text-sm">Buka Setiap Hari</span>
-            </div>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Politeknik Negeri Batam</p>
+                <p class="text-xs text-gray-400 dark:text-gray-500 mb-3">Jl. Ahmad Yani, Batam Kota, Kota Batam, Kepulauan Riau</p>
+                <span class="text-teal-600 dark:text-teal-400 font-semibold text-sm group-hover:underline">Lihat di Maps →</span>
+            </a>
         </div>
     </div>
 </div>

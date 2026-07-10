@@ -3,35 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\Rental;
-use App\Models\RentalDetail; // ✅ FIX: Import model yang hilang
+use App\Models\RentalDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class RentalController extends Controller
 {
+    /**
+     * Riwayat & daftar semua rental customer (dengan tab status baru).
+     */
     public function index()
     {
         $rentals = auth()->user()->rentals()
-            ->with('details.item')
+            ->with('details.item.category')
             ->latest()
             ->get();
 
         return view('rentals.index', compact('rentals'));
     }
 
-    public function pay(Request $request)
-    {
-        $request->validate(['rental_id' => 'required|exists:rentals,id']);
-        
-        $rental = Rental::where('id', $request->rental_id)
-            ->where('customer_id', auth()->id())
-            ->firstOrFail();
-
-        $rental->update(['payment_status' => 'paid']);
-        return back()->with('success', '💳 Pembayaran tercatat');
-    }
-
+    /**
+     * Perpanjang masa sewa (hanya untuk status on_rent).
+     * Membuat rental BARU untuk periode perpanjangan dan mengarahkan ke halaman pembayaran.
+     */
     public function extend(Request $request)
     {
         $request->validate([
@@ -41,23 +36,27 @@ class RentalController extends Controller
 
         $rental = Rental::where('id', $request->rental_id)
             ->where('customer_id', auth()->id())
-            ->where('status', 'active')
+            ->where('transaction_status', 'on_rent')
             ->firstOrFail();
 
         $newEnd = Carbon::parse($request->new_end);
         if ($newEnd->lte(Carbon::parse($rental->end_date))) {
-            return back()->with('error', '⚠️ Tanggal baru harus setelah tanggal kembali');
+            return back()->with('error', '⚠️ Tanggal baru harus setelah tanggal kembali saat ini.');
         }
 
-        // Cek konflik jadwal
+        // Tanggal mulai perpanjangan = hari setelah end_date rental aktif
+        $extStart = Carbon::parse($rental->end_date)->addDay();
+
+        // Cek konflik jadwal untuk periode perpanjangan (tidak termasuk rental yang sedang aktif)
         $itemIds = $rental->details->pluck('item_id');
         foreach ($itemIds as $itemId) {
-            if ($this->checkConflict($itemId, $rental->end_date, $request->new_end, $rental->id)) {
-                return back()->with('error', '⚠️ Barang sudah dipesan orang lain');
+            if ($this->checkConflict($itemId, $extStart->toDateString(), $newEnd->toDateString(), $rental->id)) {
+                return back()->with('error', '⚠️ Salah satu barang sudah dipesan orang lain pada tanggal tersebut.');
             }
         }
 
-        $days  = Carbon::parse($rental->end_date)->diffInDays($newEnd);
+        // Hitung biaya perpanjangan
+        $days  = $extStart->diffInDays($newEnd) + 1;
         $extra = 0;
         foreach ($rental->details as $detail) {
             $extra += $days * $detail->item->daily_rate * $detail->quantity;
@@ -65,26 +64,59 @@ class RentalController extends Controller
 
         DB::beginTransaction();
         try {
-            $rental->update([
-                'end_date'     => $newEnd,
-                'total_amount' => $rental->total_amount + $extra
+            // Ambil jam batas bayar dari settings (default 24 jam)
+            $paymentHours = (int) (\App\Models\PaymentSetting::get('payment_hours', '24'));
+
+            // Buat rental BARU untuk periode perpanjangan
+            $newRental = Rental::create([
+                'customer_id'        => auth()->id(),
+                'start_date'         => $extStart->toDateString(),
+                'end_date'           => $newEnd->toDateString(),
+                'total_amount'       => 0,
+                'status'             => 'pending',
+                'transaction_status' => 'waiting_payment',
+                'payment_status'     => 'unpaid',
+                'payment_method'     => $rental->payment_method ?? 'transfer_bank',
+                'expired_at'         => now()->addHours($paymentHours),
             ]);
+
+            // Salin detail item dari rental lama ke rental perpanjangan
+            $total = 0;
+            foreach ($rental->details as $detail) {
+                $subtotal = $days * $detail->item->daily_rate * $detail->quantity;
+                $total   += $subtotal;
+
+                RentalDetail::create([
+                    'rental_id' => $newRental->id,
+                    'item_id'   => $detail->item_id,
+                    'quantity'  => $detail->quantity,
+                    'subtotal'  => $subtotal,
+                ]);
+            }
+
+            $newRental->update(['total_amount' => $total]);
+
             DB::commit();
-            return back()->with('success', "📅 +$days hari. Tambahan: Rp" . number_format($extra, 0, ',', '.'));
+
+            return redirect()->route('rentals.payment', $newRental)
+                ->with('success', "📅 Perpanjangan berhasil! +{$days} hari — Rp" . number_format($extra, 0, ',', '.') . ". Silakan selesaikan pembayaran.");
+
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', '❌ Gagal memperpanjang sewa');
+            return back()->with('error', '❌ Gagal membuat perpanjangan sewa: ' . $e->getMessage());
         }
     }
 
-    private function checkConflict($itemId, $currentEnd, $newEnd, $excludeRentalId)
+    private function checkConflict($itemId, $start, $end, $excludeRentalId)
     {
         return RentalDetail::where('item_id', $itemId)
-            ->whereHas('rental', function ($q) use ($currentEnd, $newEnd, $excludeRentalId) {
-                $q->where('id', '!=', $excludeRentalId)
-                  ->whereNotIn('status', ['cancelled', 'completed'])
-                  ->where('start_date', '<=', $newEnd)
-                  ->where('end_date', '>=', $currentEnd);
+            ->whereHas('rental', function ($q) use ($start, $end, $excludeRentalId) {
+                $q->whereNotIn('transaction_status', ['cancelled', 'completed', 'expired']);
+                if ($excludeRentalId) {
+                    $q->where('id', '!=', $excludeRentalId);
+                }
+                $q->where('start_date', '<=', $end)
+                  ->where('end_date', '>=', $start);
             })->exists();
     }
 }

@@ -5,23 +5,35 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
+use App\Http\Requests\Customer\UpdateAccountRequest;
+
+/**
+ * Controller untuk mengelola profil akun customer.
+ */
 class AccountController extends Controller
 {
+    /**
+     * Menampilkan halaman edit profil customer.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         return view('account');
     }
 
-    public function update(Request $request)
+    /**
+     * Menyimpan perubahan profil nama dan kata sandi customer.
+     *
+     * @param UpdateAccountRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(UpdateAccountRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'password' => 'nullable|min:6'
-        ]);
-
         $user = auth()->user();
         $user->name = $request->name;
 
+        // Memperbarui kata sandi jika diinputkan
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password);
         }

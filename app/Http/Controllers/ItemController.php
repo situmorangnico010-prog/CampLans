@@ -43,12 +43,18 @@ class ItemController extends Controller
         return view('items.index', compact('items', 'cats'));
     }
 
-    // ✅ pindahkan ke dalam class
-    public function show(Item $item)
+    /**
+     * Mengambil detail barang berdasarkan ID yang dipilih customer
+     *
+     * @param int $id
+     * @return \Illuminate\View\View
+     */
+    public function show(int $id)
     {
-        $item->load('category');
+        // Mengambil detail barang menggunakan findOrFail sesuai standar spesifikasi
+        $item = Item::with('category')->findOrFail($id);
 
-        // Ambil produk serupa
+        // Ambil produk serupa yang berada dalam kategori yang sama
         $relatedItems = Item::where('category_id', $item->category_id)
                             ->where('id', '!=', $item->id)
                             ->take(4)

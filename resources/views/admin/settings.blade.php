@@ -59,13 +59,13 @@
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-bold mb-2 text-gray-700">Kata Sandi Baru</label>
-                            <input type="password" name="password" 
+                            <input type="password" name="password" minlength="8"
                                    class="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50 focus:bg-white transition"
                                    placeholder="Minimal 8 karakter">
                         </div>
                         <div>
                             <label class="block text-sm font-bold mb-2 text-gray-700">Konfirmasi Kata Sandi Baru</label>
-                            <input type="password" name="password_confirmation" 
+                            <input type="password" name="password_confirmation" minlength="8"
                                    class="w-full px-4 py-3 border rounded-xl outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50 focus:bg-white transition"
                                    placeholder="Ulangi kata sandi">
                         </div>

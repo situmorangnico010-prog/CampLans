@@ -19,6 +19,30 @@
     </div>
 </div>
 
+@if(isset($quickStats))
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div class="stat-card">
+        <p class="stat-label">Menunggu Verifikasi</p>
+        <p class="text-2xl font-black text-blue-600">{{ $quickStats['waiting_verification'] }}</p>
+        @if($quickStats['waiting_verification'] > 0)
+        <a href="{{ route('admin.payments', ['status' => 'waiting_verification']) }}" class="text-xs font-bold text-blue-600 hover:underline mt-2 inline-block">Verifikasi sekarang →</a>
+        @endif
+    </div>
+    <div class="stat-card">
+        <p class="stat-label">Sedang Disewa</p>
+        <p class="text-2xl font-black text-green-600">{{ $quickStats['on_rent'] }}</p>
+    </div>
+    <div class="stat-card">
+        <p class="stat-label">Total Transaksi</p>
+        <p class="text-2xl font-black text-slate-800">{{ $quickStats['total_rentals'] }}</p>
+    </div>
+    <div class="stat-card">
+        <p class="stat-label">Total Pendapatan</p>
+        <p class="text-lg font-black text-teal-600">Rp{{ number_format($quickStats['total_income'], 0, ',', '.') }}</p>
+    </div>
+</div>
+@endif
+
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
     <!-- Stat Item -->
     <div class="dashboard-card">
@@ -137,9 +161,7 @@
                             </p>
                         </div>
                     </div>
-                    <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase {{ $rental->status === 'pending' ? 'bg-yellow-100 text-yellow-600' : ($rental->status === 'active' ? 'bg-green-100 text-green-600' : 'bg-blue-100 text-blue-600') }}">
-                        @if($rental->status === 'pending') Menunggu @elseif($rental->status === 'active') Aktif @else Selesai @endif
-                    </span>
+                    <x-rental-status-badge :rental="$rental" class="!text-[10px]" />
                 </div>
                 @empty
                 <p class="text-center text-slate-400 py-12 text-sm font-medium">Belum ada data penyewaan terbaru</p>

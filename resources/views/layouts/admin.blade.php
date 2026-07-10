@@ -151,9 +151,17 @@
             <a href="{{ route('admin.items') }}" class="nav-btn {{ request()->routeIs('admin.items') ? 'active' : '' }}">Kelola Barang</a>
             <a href="{{ route('admin.categories') }}" class="nav-btn {{ request()->routeIs('admin.categories') ? 'active' : '' }}">Kelola Kategori</a>
             <a href="{{ route('admin.rentals') }}" class="nav-btn {{ request()->routeIs('admin.rentals') ? 'active' : '' }}">Kelola Sewa</a>
+            <a href="{{ route('admin.payments') }}" class="nav-btn {{ request()->routeIs('admin.payments', 'admin.paymentDetail') ? 'active' : '' }}">
+                Verifikasi Pembayaran
+                @php $pendingPayments = \App\Models\Rental::where('transaction_status', 'waiting_verification')->count(); @endphp
+                @if($pendingPayments > 0)
+                <span class="ml-auto bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">{{ $pendingPayments }}</span>
+                @endif
+            </a>
             
             <div class="mt-auto flex flex-col w-full">
                 <a href="{{ route('admin.withdraw') }}" class="nav-btn {{ request()->routeIs('admin.withdraw') ? 'active' : '' }}">Laporan Pendapatan</a>
+                <a href="{{ route('admin.paymentSettings') }}" class="nav-btn {{ request()->routeIs('admin.paymentSettings') ? 'active' : '' }}">Pembayaran Manual</a>
                 <a href="{{ route('admin.settings') }}" class="nav-btn {{ request()->routeIs('admin.settings') ? 'active' : '' }}">Pengaturan</a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -168,6 +176,12 @@
         @if(session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-xl mb-6 flex justify-between items-center">
                 <span>{{ session('success') }}</span>
+                <button onclick="this.parentElement.remove()">&times;</button>
+            </div>
+        @endif
+        @if(session('error'))
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-6 flex justify-between items-center">
+                <span>{{ session('error') }}</span>
                 <button onclick="this.parentElement.remove()">&times;</button>
             </div>
         @endif
