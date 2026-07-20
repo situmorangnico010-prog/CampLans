@@ -32,16 +32,10 @@ class Item extends Model {
         });
     }
     
-    /**
-     * Relasi ke model Category (Kategori barang).
-     */
     public function category() {
         return $this->belongsTo(Category::class);
     }
     
-    /**
-     * Relasi ke model RentalDetail (Detail transaksi sewa barang).
-     */
     public function rentalDetails() {
         return $this->hasMany(RentalDetail::class);
     }

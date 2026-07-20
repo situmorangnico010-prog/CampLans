@@ -1,8 +1,3 @@
-{{-- 
-Halaman Keranjang Belanja (Cart Index)
-Menampilkan daftar semua item/peralatan camping yang telah dimasukkan oleh pelanggan ke dalam keranjang belanja.
-Setiap item dalam keranjang dapat dihapus atau langsung dilanjutkan ke halaman checkout.
---}}
 @extends('layouts.app')
 @section('title', 'Keranjang Belanja - CampLens')
 

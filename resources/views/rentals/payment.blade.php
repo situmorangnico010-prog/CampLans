@@ -1,8 +1,3 @@
-{{-- 
-Halaman Detail Pembayaran (Rentals Payment Instructions)
-Menampilkan detail nominal transaksi, metode transfer bank / QRIS / E-wallet,
-serta hitung mundur batas waktu transfer. Dilengkapi dengan form upload bukti pembayaran.
---}}
 @extends('layouts.app')
 @section('title', 'Detail Pembayaran - CampLens')
 

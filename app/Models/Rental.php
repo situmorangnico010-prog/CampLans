@@ -4,11 +4,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
-/**
- * Model Rental untuk merepresentasikan data transaksi penyewaan.
- * Berisi informasi mengenai jadwal sewa, detail biaya, status sewa, status pembayaran,
- * bukti pembayaran, serta method helper untuk perhitungan denda, expired, dan timeline status.
- */
 class Rental extends Model {
     protected $fillable = [
         'kode_sewa',

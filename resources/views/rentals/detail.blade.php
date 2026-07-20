@@ -1,8 +1,3 @@
-{{-- 
-Halaman Detail Transaksi (Rentals Detail)
-Menampilkan rincian lengkap mengenai transaksi sewa tertentu, termasuk detail alat,
-jadwal sewa, timeline status, status pembayaran, info verifikasi admin, dan tombol aksi (cetak invoice, perpanjang).
---}}
 @extends('layouts.app')
 @section('title', 'Detail Transaksi - CampLens')
 
