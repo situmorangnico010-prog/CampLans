@@ -1,3 +1,8 @@
+{{-- 
+Halaman Checkout (Konfirmasi Booking)
+Menampilkan detail item yang akan disewa, durasi sewa, jumlah unit, dan kalkulasi subtotal.
+Pelanggan dapat meninjau data pemesanan sebelum melakukan submit booking secara final.
+--}}
 @extends('layouts.app')
 @section('title', 'Checkout Sewa - CampLens')
 

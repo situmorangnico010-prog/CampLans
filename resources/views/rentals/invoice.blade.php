@@ -1,3 +1,8 @@
+{{-- 
+Halaman Invoice Penyewaan (Rentals Invoice)
+Menampilkan rangkuman transaksi sewa secara formal (siap cetak / print friendly).
+Berisi detail barang, biaya total sewa, durasi sewa, dan status verifikasi pembayaran.
+--}}
 <!DOCTYPE html>
 <html lang="id">
 <head>

@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
+/**
+ * Controller untuk mengelola transaksi penyewaan (Rental) di sisi pelanggan.
+ * Mengatur riwayat sewa, pengajuan perpanjangan sewa (extension), dan pengecekan jadwal sewa.
+ */
 class RentalController extends Controller
 {
     /**
@@ -107,6 +111,10 @@ class RentalController extends Controller
         }
     }
 
+    /**
+     * Memeriksa apakah ada konflik jadwal penyewaan untuk suatu item pada rentang tanggal tertentu.
+     * Digunakan untuk memastikan item tidak disewa ganda pada waktu yang sama.
+     */
     private function checkConflict($itemId, $start, $end, $excludeRentalId)
     {
         return RentalDetail::where('item_id', $itemId)

@@ -3,6 +3,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * Model PaymentSetting untuk mengelola konfigurasi/pengaturan pembayaran.
+ * Menyimpan pengaturan berupa pasangan key-value seperti metode transfer, rekening bank,
+ * batasan waktu pembayaran, serta gambar QRIS.
+ */
 class PaymentSetting extends Model
 {
     protected $fillable = ['key', 'value'];

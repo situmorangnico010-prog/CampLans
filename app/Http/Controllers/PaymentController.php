@@ -7,6 +7,10 @@ use App\Models\PaymentSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * Controller untuk mengelola proses pembayaran oleh pelanggan (Customer).
+ * Mengatur halaman instruksi, proses upload bukti pembayaran, melihat detail, dan mencetak invoice.
+ */
 class PaymentController extends Controller
 {
     /**

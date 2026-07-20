@@ -1,3 +1,10 @@
+{{-- 
+Halaman Riwayat Rental (Rentals Index)
+Menampilkan daftar transaksi sewa pelanggan yang dibagi menjadi beberapa tab status:
+1. Pembayaran (menunggu pembayaran, verifikasi, atau ditolak)
+2. Berjalan (sedang disewa/digunakan)
+3. Riwayat (selesai, kedaluwarsa, atau dibatalkan)
+--}}
 @extends('layouts.app')
 @section('title', 'Riwayat Rental - CampLens')
 

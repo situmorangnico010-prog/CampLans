@@ -1,3 +1,7 @@
+{{-- 
+Komponen Timeline Status Rental (Rental Timeline Component)
+Menampilkan tahapan proses penyewaan (Alur transaksi mulai dari menunggu pembayaran, verifikasi, masa sewa, hingga selesai/kembali) dalam bentuk timeline visual yang interaktif.
+--}}
 @props(['rental'])
 
 @php
